@@ -1,5 +1,7 @@
 #include "../header/TrafficSignRecognition.h"
 
+//Traffic sign recognition from 640x480 RGB images
+//Images are converted to grayscale then filtered and then processed to identify and recognize the sign.
 int main()
 {
 	char first[255];
@@ -20,17 +22,19 @@ int main()
 		
 		IplImage* image = cvLoadImage(full, CV_LOAD_IMAGE_GRAYSCALE);      
 
+		//Gaussian filter
 		cvSmooth(image, image, CV_GAUSSIAN,3,3);
 		cvDilate(image,image,NULL, 1);
 
-		//cvCvtColor(image, image, CV_GRAY2RGB);
-		/*IplImage* hsv = cvCreateImage( cvGetSize(image), IPL_DEPTH_8U, 3 );
+		cvCvtColor(image, image, CV_GRAY2RGB);
+		IplImage* hsv = cvCreateImage( cvGetSize(image), IPL_DEPTH_8U, 3 );
 		IplImage *gray = cvCreateImage(cvGetSize(image),IPL_DEPTH_8U,1);
 		
 		hsv = convertPixeltoHSV(image);		
 		CvMemStorage* storage = cvCreateMemStorage(0);
 		cvCvtColor(image, gray, CV_RGB2GRAY);
 
+		//Separate RGB Colors
 		IplImage* image_red = cvCreateImage( cvGetSize(image), IPL_DEPTH_8U, 1 );
 		IplImage* image_blue = cvCreateImage( cvGetSize(image), IPL_DEPTH_8U, 1 );
 		IplImage* image_yellow = cvCreateImage( cvGetSize(image), IPL_DEPTH_8U, 1 );
@@ -70,7 +74,8 @@ int main()
 	CvRect region;
 	
 	for(int i=0; i<5; i++){
-
+		
+		//Apply the color threshold for each specific color
 		//region = cvRect( candidates[i].x_mean-(candidates[i].x_mean/2), candidates[i].y_mean-(candidates[i].y_mean/2), candidates[i].x_mean, candidates[i].y_mean );
 		if( (candidates[i].x_mean-75)>0 && (candidates[i].y_mean-75)>0){region= cvRect( candidates[i].x_mean-75, candidates[i].y_mean-75, 180, 180 );}
 		else{
